@@ -13,9 +13,9 @@ const signup = async (req, res) => {
             return res.status(400).json({ error: 'Email already in use' });
         }
 
-        const user = new User({ username, displayname, dob, mail, password });
-        await user.save();
-        res.status(201).json({ message: 'User registered successfully!' });
+        const user = await User.create({ username, displayname, dob, mail, password });
+        
+        res.status(201).json(user);
     } catch (error) {
         res.status(500).json({ error: 'Server error' });
     }
