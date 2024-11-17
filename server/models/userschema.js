@@ -22,7 +22,13 @@ const userSchema = new mongoose.Schema({
         unique: true,  // Ensures no duplicate email addresses
         trim: true,
         lowercase: true, // Automatically converts email to lowercase
-        match: [/^\S+@\S+\.\S+$/, 'Please provide a valid email address'], // Email validation regex
+        validate: {
+            validator: function(value) {
+                // Regular expression to match email ending with @nitc.ac.in
+                return /^[a-zA-Z0-9._%+-]+@nitc\.ac\.in$/.test(value);
+            },
+            message: 'Please provide a valid university email ending with @nitc.ac.in'
+        }
     },
     password: {
         type: String,
