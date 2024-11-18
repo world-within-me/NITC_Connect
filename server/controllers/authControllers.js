@@ -17,7 +17,7 @@ const signup = async (req, res) => {
         
         res.status(201).json(user);
     } catch (error) {
-        res.status(500).json({ error: 'Server error' });
+        res.status(500).json({ error: error.message });
     }
 };
 
@@ -35,7 +35,6 @@ const login = async (req, res) => {
         if (!isMatch) {
             return res.status(400).json({ error: 'Invalid email or password' });
         }
-
         const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
         res.cookie('authToken', token, { httpOnly: true, maxAge: 3600000 });
         res.status(200).json({ message: 'Login successful', token });
@@ -49,5 +48,6 @@ const logout = (req, res) => {
     res.clearCookie('authToken');
     res.status(200).json({ message: 'Logged out successfully' });
 };
+
 
 export{signup,login,logout}

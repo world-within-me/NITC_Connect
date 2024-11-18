@@ -1,5 +1,5 @@
 import Community from '../models/communitySchema.js';
-
+import Follows from '../models/followsSchema.js';
 /**
  * Create a new community
  * @route POST /communities
@@ -20,6 +20,11 @@ export const createCommunity = async (req, res) => {
         // Create and save the new community
         const community = new Community({ name, description, creator: creatorId });
         await community.save();
+
+        await Follows.create({
+            userId: req.user.id,
+            communityId: community._id,
+        });
 
         res.status(201).json({ message: 'Community created successfully', community });
     } catch (error) {
